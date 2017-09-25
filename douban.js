@@ -18,8 +18,8 @@ var log = console.log.bind(console)
 //缓存下载的原始页面
 var cachedUrl = url => {
     var cacheFile = 'cached_html/' + url.split('?')[1] + '.html'
-    // 如果存在就读取缓存文件
-    // 如果不存在就下载并写入缓存文件
+    // 存在就读取缓存文件
+    // 不存在就下载并写入缓存文件
     var fs = require('fs')
     var exists = fs.existsSync(cacheFile)
     if (exists) {
@@ -39,7 +39,6 @@ var cachedUrl = url => {
 var movieFromDiv = function(div) {
     var e = cheerio.load(div)
 
-    // 创建一个电影类的实例并且获取数据
     // 这些数据都是从 html 结构里面人工分析出来的
     var movie = new Movie()
     movie.name = e('.title').text()
@@ -82,9 +81,8 @@ var saveMovie = function(movies) {
     fs.writeFileSync(path, s)
 }
 
-// 使用 request 库来下载图片
+// 用 request 库下载图片
 var downloadCovers = movies => {
-
     var request = require('request')
     var fs = require('fs')
     for (var i = 0; i < movies.length; i++) {
@@ -108,9 +106,6 @@ var __main = function() {
         movies = [...movies, ...moviesInPage]
     }
     saveMovie(movies)
-    // download covers
     downloadCovers(movies)
 }
-
-
 __main()
